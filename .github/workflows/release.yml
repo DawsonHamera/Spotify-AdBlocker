@@ -28,7 +28,7 @@ jobs:
 
       - name: Build executable
         run: |
-          python -m PyInstaller --noconfirm --clean --onefile --windowed --name SpotifyAdBlocker --collect-all pycaw --collect-all winrt main.py
+          python -m PyInstaller --noconfirm --clean --onefile --windowed --name SpotifyAdBlocker --runtime-hook winrt_runtime_hook.py --collect-all pycaw --collect-all winrt main.py
 
       - name: Create release
         uses: softprops/action-gh-release@v2

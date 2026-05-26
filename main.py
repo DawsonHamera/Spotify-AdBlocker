@@ -11,12 +11,6 @@ try:
 except ImportError:
     winreg = None
 
-try:
-    import winrt.windows.foundation  # noqa: F401
-    import winrt.windows.foundation.collections  # noqa: F401
-except Exception:
-    pass
-
 from pycaw.pycaw import AudioUtilities
 from winrt.windows.media.control import (
     GlobalSystemMediaTransportControlsSessionManager as MediaManager
