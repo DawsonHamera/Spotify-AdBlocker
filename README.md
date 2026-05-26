@@ -60,10 +60,11 @@ After that, delete the `dist` folder if you want a full manual cleanup of the ap
 
 ## Publish A GitHub Release
 
-1. Push this repo to GitHub.
-2. Create a tag like `v1.0.0` locally.
-3. Push the tag.
-4. The GitHub Action will build the exe and attach it to the release automatically.
+For now, use the local build artifact from `build_exe.ps1` as the release file. That is the known-good exe.
+
+1. Run `.uild_exe.ps1` locally.
+2. Upload `dist\SpotifyAdBlocker.exe` to a GitHub Release manually.
+3. Optionally tag the repo for version tracking, but do not rely on the tag build until it is verified.
 
 Example:
 
@@ -72,7 +73,7 @@ git tag v1.0.0
 git push origin v1.0.0
 ```
 
-If you want to create the release manually instead, upload `dist\SpotifyAdBlocker.exe` as the release asset.
+Warning: the GitHub Actions build path has had WinRT packaging differences from the local build. Use the locally built exe for release assets until that path is fully proven.
 
 ## Notes
 

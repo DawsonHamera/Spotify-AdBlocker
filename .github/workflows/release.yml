@@ -1,6 +1,7 @@
 name: Build and Release
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - 'v*'
@@ -30,7 +31,15 @@ jobs:
         run: |
           python -m PyInstaller --noconfirm --clean --onefile --windowed --name SpotifyAdBlocker --runtime-hook winrt_runtime_hook.py --collect-all pycaw --collect-all winrt main.py
 
+      - name: Upload build artifact
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: SpotifyAdBlocker-windows
+          path: dist/SpotifyAdBlocker.exe
+
       - name: Create release
+        if: github.ref_type == 'tag'
         uses: softprops/action-gh-release@v2
         with:
           files: dist/SpotifyAdBlocker.exe
