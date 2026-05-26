@@ -1,9 +1,15 @@
 import asyncio
+import argparse
 import logging
 import sys
 from logging.handlers import RotatingFileHandler
 from dataclasses import dataclass
 from pathlib import Path
+
+try:
+    import winreg
+except ImportError:
+    winreg = None
 
 from pycaw.pycaw import AudioUtilities
 from winrt.windows.media.control import (
@@ -17,6 +23,8 @@ LOG_DIR_PATH = APP_ROOT / "logs"
 LOG_FILE_PATH = LOG_DIR_PATH / "spotify_ad_muter.log"
 LOG_MAX_BYTES = 1_000_000
 LOG_BACKUP_COUNT = 2
+AUTOSTART_VALUE_NAME = "Spotify Ad Muter"
+AUTOSTART_RUN_KEY = r"Software\Microsoft\Windows\CurrentVersion\Run"
 
 LOGGER = logging.getLogger("spotify_ad_muter")
 
@@ -56,6 +64,48 @@ def setup_logging():
 def log(msg):
     if ENABLE_LOGGING:
         LOGGER.info(msg)
+
+
+def ensure_autostart_enabled():
+    if not getattr(sys, "frozen", False):
+        return
+
+    if winreg is None:
+        log("Autostart setup skipped: winreg unavailable")
+        return
+
+    try:
+        command = f'"{Path(sys.executable).resolve()}"'
+
+        with winreg.CreateKey(winreg.HKEY_CURRENT_USER, AUTOSTART_RUN_KEY) as key:
+            existing_value = None
+
+            try:
+                existing_value, _ = winreg.QueryValueEx(key, AUTOSTART_VALUE_NAME)
+            except FileNotFoundError:
+                pass
+
+            if existing_value != command:
+                winreg.SetValueEx(key, AUTOSTART_VALUE_NAME, 0, winreg.REG_SZ, command)
+                log("Autostart enabled for current user")
+    except Exception as e:
+        log(f"Autostart setup error: {e}")
+
+
+def remove_autostart_entry():
+    if winreg is None:
+        return False
+
+    try:
+        with winreg.CreateKey(winreg.HKEY_CURRENT_USER, AUTOSTART_RUN_KEY) as key:
+            try:
+                winreg.DeleteValue(key, AUTOSTART_VALUE_NAME)
+                return True
+            except FileNotFoundError:
+                return False
+    except Exception as e:
+        log(f"Autostart removal error: {e}")
+        return False
 
 
 def to_seconds(value):
@@ -279,8 +329,22 @@ async def main():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--uninstall", action="store_true")
+    args, _ = parser.parse_known_args()
+
     setup_logging()
+
+    if args.uninstall:
+        removed = remove_autostart_entry()
+        if removed:
+            log("Autostart entry removed")
+        else:
+            log("Autostart entry was not present")
+        raise SystemExit(0)
+
     try:
+        ensure_autostart_enabled()
         asyncio.run(main())
     except KeyboardInterrupt:
         log("Interrupted by user")

@@ -46,6 +46,18 @@ If you want a one-click version for a friend, build a single executable with:
 
 That will install the required packages and write the release executable to `dist\SpotifyAdBlocker.exe`.
 
+## Start Automatically
+
+The packaged `.exe` enables a user-level autostart entry on its first launch, so there is no separate installer step.
+
+To remove that autostart entry with the same exe:
+
+```powershell
+.\dist\SpotifyAdBlocker.exe --uninstall
+```
+
+After that, delete the `dist` folder if you want a full manual cleanup of the app files.
+
 ## Publish A GitHub Release
 
 1. Push this repo to GitHub.
