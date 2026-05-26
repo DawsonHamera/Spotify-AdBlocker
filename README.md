@@ -22,7 +22,7 @@ The script imports `winrt.windows.media.control`.
 python -m pip install -r requirements.txt
 ```
 
-If Spotify's media session is visible to Windows, the script will log what it sees and keep running in a monitor loop. Logs are written to `logs\spotify_ad_muter.log`.
+If Spotify's media session is visible to Windows, the script will log what it sees and keep running in a monitor loop. In source runs, logs are written to `logs\spotify_ad_muter.log`; in the packaged `.exe`, logs are written next to the executable in `dist\logs\spotify_ad_muter.log`.
 
 ## Run
 

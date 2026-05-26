@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import sys
 from logging.handlers import RotatingFileHandler
 from dataclasses import dataclass
 from pathlib import Path
@@ -11,7 +12,8 @@ from winrt.windows.media.control import (
 
 ENABLE_LOGGING = True
 
-LOG_DIR_PATH = Path(__file__).resolve().parent / "logs"
+APP_ROOT = Path(sys.executable).resolve().parent if getattr(sys, "frozen", False) else Path(__file__).resolve().parent
+LOG_DIR_PATH = APP_ROOT / "logs"
 LOG_FILE_PATH = LOG_DIR_PATH / "spotify_ad_muter.log"
 LOG_MAX_BYTES = 1_000_000
 LOG_BACKUP_COUNT = 2
