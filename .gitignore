@@ -1,1 +1,6 @@
-/logs
+build/
+dist/
+*.spec
+logs/
+__pycache__/
+*.log/logs

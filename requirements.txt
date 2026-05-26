@@ -1,0 +1,4 @@
+pycaw
+winrt-Windows.Foundation.Collections
+winrt-Windows.Media.Control
+pyinstaller>=6.0
