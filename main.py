@@ -17,17 +17,6 @@ try:
 except Exception:
     pass
 
-try:
-    import winrt.windows.foundation as _foundation_module
-
-    if not hasattr(_foundation_module, "_IAsyncOperation") and hasattr(_foundation_module, "IAsyncOperation"):
-        _foundation_module._IAsyncOperation = _foundation_module.IAsyncOperation
-
-    if not hasattr(_foundation_module, "_IAsyncOperationWithProgress") and hasattr(_foundation_module, "IAsyncOperationWithProgress"):
-        _foundation_module._IAsyncOperationWithProgress = _foundation_module.IAsyncOperationWithProgress
-except Exception:
-    pass
-
 from pycaw.pycaw import AudioUtilities
 from winrt.windows.media.control import (
     GlobalSystemMediaTransportControlsSessionManager as MediaManager

@@ -1,4 +1,4 @@
-pycaw
-winrt-Windows.Foundation.Collections
-winrt-Windows.Media.Control
-pyinstaller>=6.0
+pycaw==20251023
+winrt-Windows.Foundation.Collections==3.2.1
+winrt-Windows.Media.Control==3.2.1
+pyinstaller==6.20.0
